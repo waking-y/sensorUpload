@@ -112,10 +112,10 @@ int main(void)
 	while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
 		DelayXms(500);
 	UsartPrintf(USART_DEBUG, "Connect MQTTs Server success\r\n");
-//	
-//	while(OneNet_DevLink())			//接入OneNET
-//		DelayXms(500);
-//	
+	
+	while(OneNet_DevLink())			//接入OneNET
+		DelayXms(500);
+	
 	LED_Set(LED_ON);				//鸣叫提示接入成功
 	DelayMs(5000);
 	LED_Set(LED_OFF);
