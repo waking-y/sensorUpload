@@ -34,6 +34,7 @@
 #include "key.h"
 #include "LED.h"
 //#include "sht20.h"
+#include "dht11.h"
 
 //C库
 #include <string.h>
@@ -69,7 +70,13 @@ void Hardware_Init(void)
 	//IIC_Init();	//软件IIC初始化
 	Key_Init();
 	
-	LED_Init();									//蜂鸣器初始化
+	LED_Init();									//LED初始化
+	
+	while(DHT11_Init())
+	{
+		UsartPrintf(USART_DEBUG, "DHT11 Error \r\n");
+		DelayMs(1000);
+	}
 	
 	UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
 	
@@ -88,6 +95,8 @@ void Hardware_Init(void)
 *	说明：		
 ************************************************************
 */
+u8 temp;
+u8 humi;
 int main(void)
 {
 	
@@ -114,6 +123,8 @@ int main(void)
 	
 	while(1)
 	{
+		DHT11_Read_Data(&temp,&humi);//
+		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
 		
 //		if(++timeCount >= 500)									//发送间隔5s
 //		{
@@ -129,7 +140,7 @@ int main(void)
 //		if(dataPtr != NULL)
 //			OneNet_RevPro(dataPtr);
 //		UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
-//		DelayXms(10);
+		DelayMs(10);
 	
 	}
 
