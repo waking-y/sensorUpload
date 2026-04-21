@@ -116,14 +116,16 @@ int main(void)
 	while(OneNet_DevLink())			//接入OneNET
 		DelayXms(500);
 	
+	OneNET_Subscribe();
+	
 	LED_Set(LED_ON);				//鸣叫提示接入成功
 	DelayMs(5000);
 	LED_Set(LED_OFF);
 	
 	while(1)
 	{
-		DHT11_Read_Data(&temp,&humi);//
-		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
+//		DHT11_Read_Data(&temp,&humi);//
+//		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
 		
 		if(++timeCount >= 500)									//发送间隔5s
 		{
@@ -135,11 +137,11 @@ int main(void)
 			timeCount = 0;
 			ESP8266_Clear();
 		}
-//		
-//		dataPtr = ESP8266_GetIPD(0);
-//		if(dataPtr != NULL)
-//			OneNet_RevPro(dataPtr);
-//		UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
+		
+		dataPtr = ESP8266_GetIPD(0);
+		if(dataPtr != NULL)
+			OneNet_RevPro(dataPtr);
+		UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
 		DelayMs(10);
 	
 	}

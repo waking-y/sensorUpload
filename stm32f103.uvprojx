@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\core;.\fwlib\inc;.\hardware\inc;.\user;.\NET\onenet\inc;.\NET\MQTT;.\NET\device\inc</IncludePath>
+              <IncludePath>.\core;.\fwlib\inc;.\hardware\inc;.\user;.\NET\onenet\inc;.\NET\MQTT;.\NET\device\inc;.\NET\CJSON</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -534,6 +534,16 @@
               <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\NET\device\src\esp8266.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CJSON</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\NET\CJSON\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>
