@@ -35,13 +35,15 @@
 #include "LED.h"
 //#include "sht20.h"
 #include "dht11.h"
+#include "oled.h"
 
 //C库
 #include <string.h>
 
 #define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
 
-
+void Display_Init(void);
+void Refresh_Data(void);
 /*
 ************************************************************
 *	函数名称：	Hardware_Init
@@ -77,7 +79,9 @@ void Hardware_Init(void)
 		DelayMs(1000);
 	}
 	
-	UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
+	Display_Init();
+	
+	//UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
 	
 }
 
@@ -141,9 +145,48 @@ int main(void)
 		dataPtr = ESP8266_GetIPD(0);
 		if(dataPtr != NULL)
 			OneNet_RevPro(dataPtr);
-		UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
+		//UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
+		
+		Refresh_Data();
+		
 		DelayMs(10);
 	
 	}
 
+}
+
+void Display_Init(void)
+{
+	OLED_Init();			//初始化OLED  
+	OLED_Clear(); 
+	OLED_ShowCHinese(0,0,1);//温
+	OLED_ShowCHinese(18,0,2);//度
+	OLED_ShowCHinese(36,0,0);//：
+
+	OLED_ShowCHinese(72,0,3);//℃
+	
+	OLED_ShowCHinese(0,3,4);//湿
+	OLED_ShowCHinese(18,3,5);//度
+	OLED_ShowCHinese(36,3,0);//：
+
+	OLED_ShowString(72,3,"%",16);//%
+	
+	OLED_ShowCHinese(0,6,6);//台
+	OLED_ShowCHinese(18,6,7);//灯
+	OLED_ShowCHinese(36,6,0);//：
+
+}
+
+void Refresh_Data(void)
+{
+	char buf[3];
+	sprintf(buf, "%2d", temp);
+	OLED_ShowString(54,0,buf,16);//温度值
+	
+	sprintf(buf, "%2d", humi);
+	OLED_ShowString(54,3,buf,16);//湿度值
+	
+	//sprintf(text, "\"led\":{\"value\":%s}", LED_info.LED_Status ? "true" : "false");
+	if(LED_info.LED_Status)OLED_ShowCHinese(54,6,8);//亮/灭
+	else OLED_ShowCHinese(54,6,9);//亮/灭
 }

@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\core;.\fwlib\inc;.\hardware\inc;.\user;.\NET\onenet\inc;.\NET\MQTT;.\NET\device\inc;.\NET\CJSON</IncludePath>
+              <IncludePath>.\core;.\fwlib\inc;.\hardware\inc;.\user;.\NET\onenet\inc;.\NET\MQTT;.\NET\device\inc;.\NET\CJSON;.\OLED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -544,6 +544,16 @@
               <FileName>cJSON.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\NET\CJSON\cJSON.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>OLED</GroupName>
+          <Files>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OLED\oled.c</FilePath>
             </File>
           </Files>
         </Group>

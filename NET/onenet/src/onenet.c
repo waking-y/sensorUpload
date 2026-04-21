@@ -164,7 +164,7 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 //----------------------------------------------------将access_key进行Base64解码----------------------------------------------------
 	memset(access_key_base64, 0, sizeof(access_key_base64));
 	BASE64_Decode((unsigned char *)access_key_base64, sizeof(access_key_base64), &olen, (unsigned char *)access_key, strlen(access_key));
-	UsartPrintf(USART_DEBUG, "access_key_base64: %s\r\n", access_key_base64);
+	//UsartPrintf(USART_DEBUG, "access_key_base64: %s\r\n", access_key_base64);
 	
 //----------------------------------------------------计算string_for_signature-----------------------------------------------------
 	memset(string_for_signature, 0, sizeof(string_for_signature));
@@ -172,7 +172,7 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 		snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s\n%s", et, METHOD, res, ver);
 	else
 		snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s/devices/%s\n%s", et, METHOD, res, dev_name, ver);
-	UsartPrintf(USART_DEBUG, "string_for_signature: %s\r\n", string_for_signature);
+	//UsartPrintf(USART_DEBUG, "string_for_signature: %s\r\n", string_for_signature);
 	
 //----------------------------------------------------加密-------------------------------------------------------------------------
 	memset(hmac_sha1_buf, 0, sizeof(hmac_sha1_buf));
@@ -181,7 +181,7 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 				(unsigned char *)string_for_signature, strlen(string_for_signature),
 				(unsigned char *)hmac_sha1_buf);
 	
-	UsartPrintf(USART_DEBUG, "hmac_sha1_buf: %s\r\n", hmac_sha1_buf);
+	//UsartPrintf(USART_DEBUG, "hmac_sha1_buf: %s\r\n", hmac_sha1_buf);
 	
 //----------------------------------------------------将加密结果进行Base64编码------------------------------------------------------
 	olen = 0;
@@ -190,14 +190,14 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 
 //----------------------------------------------------将Base64编码结果进行URL编码---------------------------------------------------
 	OTA_UrlEncode(sign_buf);
-	UsartPrintf(USART_DEBUG, "sign_buf: %s\r\n", sign_buf);
+	//UsartPrintf(USART_DEBUG, "sign_buf: %s\r\n", sign_buf);
 	
 //----------------------------------------------------计算Token--------------------------------------------------------------------
 	if(flag)
 		snprintf(authorization_buf, authorization_buf_len, "version=%s&res=products%%2F%s&et=%d&method=%s&sign=%s", ver, res, et, METHOD, sign_buf);
 	else
 		snprintf(authorization_buf, authorization_buf_len, "version=%s&res=products%%2F%s%%2Fdevices%%2F%s&et=%d&method=%s&sign=%s", ver, res, dev_name, et, METHOD, sign_buf);
-	UsartPrintf(USART_DEBUG, "Token: %s\r\n", authorization_buf);
+	//UsartPrintf(USART_DEBUG, "Token: %s\r\n", authorization_buf);
 	
 	return 0;
 
@@ -315,9 +315,9 @@ _Bool OneNet_DevLink(void)
 	OneNET_Authorization("2018-10-31", PROID, 1956499200, ACCESS_KEY, DEVICE_NAME,
 								authorization_buf, sizeof(authorization_buf), 0);
 	
-	UsartPrintf(USART_DEBUG, "OneNET_DevLink\r\n"
-							"NAME: %s,	PROID: %s,	KEY:%s\r\n"
-                        , DEVICE_NAME, PROID, authorization_buf);
+//	UsartPrintf(USART_DEBUG, "OneNET_DevLink\r\n"
+//							"NAME: %s,	PROID: %s,	KEY:%s\r\n"
+//                        , DEVICE_NAME, PROID, authorization_buf);
 	
 	if(MQTT_PacketConnect(PROID, authorization_buf, DEVICE_NAME, 256, 1, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{
@@ -441,7 +441,7 @@ void OneNET_Publish(const char *topic, const char *msg)
 
 	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						//协议包
 	
-	UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
+	//UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
 	
 	if(MQTT_PacketPublish(MQTT_PUBLISH_ID, topic, msg, strlen(msg), MQTT_QOS_LEVEL0, 0, 1, &mqtt_packet) == 0)
 	{
@@ -527,8 +527,8 @@ void OneNet_RevPro(unsigned char *cmd)
 			{
 				char *data_ptr = NULL;
 				
-				UsartPrintf(USART_DEBUG, "topic: %s, topic_len: %d, payload: %s, payload_len: %d\r\n",
-																	cmdid_topic, topic_len, req_payload, req_len);
+//				UsartPrintf(USART_DEBUG, "topic: %s, topic_len: %d, payload: %s, payload_len: %d\r\n",
+//																	cmdid_topic, topic_len, req_payload, req_len);
 				
 				raw_json = cJSON_Parse(req_payload);
 				params_json = cJSON_GetObjectItem(raw_json, "params");
