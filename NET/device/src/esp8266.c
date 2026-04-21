@@ -1,23 +1,3 @@
-/**
-	************************************************************
-	************************************************************
-	************************************************************
-	*	文件名： 	esp8266.c
-	*
-	*	作者： 		张继瑞
-	*
-	*	日期： 		2017-05-08
-	*
-	*	版本： 		V1.0
-	*
-	*	说明： 		ESP8266的简单驱动
-	*
-	*	修改记录：	
-	************************************************************
-	************************************************************
-	************************************************************
-**/
-
 //单片机头文件
 #include "stm32f10x.h"
 
@@ -33,7 +13,7 @@
 #include <stdio.h>
 
 
-#define ESP8266_WIFI_INFO		"AT+CWJAP=\"ONENET\",\"IOT@Chinamobile123\"\r\n"
+#define ESP8266_WIFI_INFO		"AT+CWJAP=\"MyWifi\",\"12345678\"\r\n"
 
 
 unsigned char esp8266_buf[512];
@@ -212,23 +192,7 @@ unsigned char *ESP8266_GetIPD(unsigned short timeOut)
 //	说明：		
 //==========================================================
 void ESP8266_Init(void)
-{
-	
-	GPIO_InitTypeDef GPIO_Initure;
-	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-
-	//ESP8266复位引脚
-	GPIO_Initure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Initure.GPIO_Pin = GPIO_Pin_14;					//GPIOC14-复位
-	GPIO_Initure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOC, &GPIO_Initure);
-	
-	GPIO_WriteBit(GPIOC, GPIO_Pin_14, Bit_RESET);
-	DelayXms(250);
-	GPIO_WriteBit(GPIOC, GPIO_Pin_14, Bit_SET);
-	DelayXms(500);
-	
+{	
 	ESP8266_Clear();
 	
 	UsartPrintf(USART_DEBUG, "1. AT\r\n");
