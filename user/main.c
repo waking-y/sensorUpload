@@ -94,8 +94,8 @@ void Hardware_Init(void)
 *	说明：		
 ************************************************************
 */
-u8 temp;
-u8 humi;
+u8 temp,humi;
+
 int main(void)
 {
 	
@@ -125,15 +125,16 @@ int main(void)
 		DHT11_Read_Data(&temp,&humi);//
 		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
 		
-//		if(++timeCount >= 500)									//发送间隔5s
-//		{
-//			
-//			UsartPrintf(USART_DEBUG, "OneNet_SendData\r\n");
-//			OneNet_SendData();									//发送数据
-//			
-//			timeCount = 0;
-//			ESP8266_Clear();
-//		}
+		if(++timeCount >= 500)									//发送间隔5s
+		{
+			DHT11_Read_Data(&temp,&humi);
+			
+			UsartPrintf(USART_DEBUG, "OneNet_SendData\r\n");
+			OneNet_SendData();									//发送数据
+			
+			timeCount = 0;
+			ESP8266_Clear();
+		}
 //		
 //		dataPtr = ESP8266_GetIPD(0);
 //		if(dataPtr != NULL)

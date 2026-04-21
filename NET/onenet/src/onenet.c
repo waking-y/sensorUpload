@@ -1,24 +1,3 @@
-/**
-	************************************************************
-	************************************************************
-	************************************************************
-	*	文件名： 	onenet.c
-	*
-	*	作者： 		张继瑞
-	*
-	*	日期： 		2017-05-08
-	*
-	*	版本： 		V1.1
-	*
-	*	说明： 		与onenet平台的数据交互接口层
-	*
-	*	修改记录：	V1.0：协议封装、返回判断都在同一个文件，并且不同协议接口不同。
-	*				V1.1：提供统一接口供应用层使用，根据不同协议文件来封装协议相关的内容。
-	************************************************************
-	************************************************************
-	************************************************************
-**/
-
 //单片机头文件
 #include "stm32f10x.h"
 
@@ -37,6 +16,7 @@
 #include "usart.h"
 #include "delay.h"
 #include "sht20.h"
+#include "led.h"
 
 //C库
 #include <string.h>
@@ -370,6 +350,7 @@ _Bool OneNet_DevLink(void)
 	
 }
 
+extern u8 temp,humi;
 unsigned char OneNet_FillBuf(char *buf)
 {
 	
@@ -377,14 +358,18 @@ unsigned char OneNet_FillBuf(char *buf)
 	
 	memset(text, 0, sizeof(text));
 	
-	strcpy(buf, "{\"id\":123,\"dp\":{");
+	strcpy(buf, "{\"id\":\"123\",\"params\":{");
 	
 	memset(text, 0, sizeof(text));
-	//sprintf(text, "\"Tempreture\":[{\"v\":%f}],", sht20_info.tempreture);
+	sprintf(text, "\"temp\":{\"value\":%d},", temp);
 	strcat(buf, text);
 	
 	memset(text, 0, sizeof(text));
-	//sprintf(text, "\"Humidity\":[{\"v\":%f}]", sht20_info.humidity);
+	sprintf(text, "\"humi\":{\"value\":%d},", humi);
+	strcat(buf, text);
+	
+	memset(text, 0, sizeof(text));
+	sprintf(text, "\"led\":{\"value\":%s}", LED_info.LED_Status ? "true" : "false");
 	strcat(buf, text);
 	
 	strcat(buf, "}}");
