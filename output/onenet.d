@@ -39,5 +39,7 @@
 .\output\onenet.o: .\hardware\inc\usart.h
 .\output\onenet.o: .\hardware\inc\delay.h
 .\output\onenet.o: .\hardware\inc\sht20.h
+.\output\onenet.o: .\hardware\inc\led.h
 .\output\onenet.o: D:\EmbeddedSoftware\Keil5\ARM\ARMCC\Bin\..\include\string.h
 .\output\onenet.o: D:\EmbeddedSoftware\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\output\onenet.o: .\NET\CJSON\cJSON.h

@@ -315,9 +315,9 @@ _Bool OneNet_DevLink(void)
 	OneNET_Authorization("2018-10-31", PROID, 1956499200, ACCESS_KEY, DEVICE_NAME,
 								authorization_buf, sizeof(authorization_buf), 0);
 	
-//	UsartPrintf(USART_DEBUG, "OneNET_DevLink\r\n"
-//							"NAME: %s,	PROID: %s,	KEY:%s\r\n"
-//                        , DEVICE_NAME, PROID, authorization_buf);
+	UsartPrintf(USART_DEBUG, "OneNET_DevLink\r\n"
+							"NAME: %s,	PROID: %s,	KEY:%s\r\n"
+                        , DEVICE_NAME, PROID, authorization_buf);
 	
 	if(MQTT_PacketConnect(PROID, authorization_buf, DEVICE_NAME, 256, 1, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{

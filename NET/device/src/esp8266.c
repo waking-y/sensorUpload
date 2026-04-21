@@ -195,24 +195,32 @@ void ESP8266_Init(void)
 {	
 	ESP8266_Clear();
 	
-	UsartPrintf(USART_DEBUG, "1. AT\r\n");
+	ESP8266_SendCmd("AT+RESTORE\r\n", "ready"); 
+	DelayXms(2000); // 给它点时间重启
+	
+	OLED_ShowString(0,0,"ESP8266 Init",8);
+	//UsartPrintf(USART_DEBUG, "1. AT\r\n");
+	OLED_ShowString(0,1,"1. AT...",8);
 	while(ESP8266_SendCmd("AT\r\n", "OK"))
 		DelayXms(500);
 	
-	UsartPrintf(USART_DEBUG, "2. CWMODE\r\n");
+	//UsartPrintf(USART_DEBUG, "2. CWMODE\r\n");
+	OLED_ShowString(0,2,"2. CWMODE...",8);
 	while(ESP8266_SendCmd("AT+CWMODE=1\r\n", "OK"))
 		DelayXms(500);
 	
-	UsartPrintf(USART_DEBUG, "3. AT+CWDHCP\r\n");
+	//UsartPrintf(USART_DEBUG, "3. AT+CWDHCP\r\n");
+	OLED_ShowString(0,3,"3. AT+CWDHCP...",8);
 	while(ESP8266_SendCmd("AT+CWDHCP=1,1\r\n", "OK"))
 		DelayXms(500);
 	
-	UsartPrintf(USART_DEBUG, "4. CWJAP\r\n");
+	//UsartPrintf(USART_DEBUG, "4. CWJAP\r\n");
+	OLED_ShowString(0,4,"4. CWJAP...",8);
 	while(ESP8266_SendCmd(ESP8266_WIFI_INFO, "GOT IP"))
 		DelayXms(500);
 	
-	UsartPrintf(USART_DEBUG, "5. ESP8266 Init OK\r\n");
-
+	//UsartPrintf(USART_DEBUG, "5. ESP8266 Init OK\r\n");
+	OLED_ShowString(0,5,"5. ESP8266 Init OK",8);
 }
 
 //==========================================================

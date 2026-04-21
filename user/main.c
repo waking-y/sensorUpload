@@ -41,6 +41,7 @@
 #include <string.h>
 
 #define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
+static u8 f=0;
 
 void Display_Init(void);
 void Refresh_Data(void);
@@ -67,22 +68,24 @@ void Hardware_Init(void)
 	Usart1_Init(115200);							//串口1，打印信息用
 	
 	Usart2_Init(115200);							//串口2，驱动ESP8266用
-	
 	//IIC_Init();	//软件IIC初始化
 	Key_Init();
 	
-	LED_Init();									//LED初始化
+	LED_Init();		
+
+	OLED_Init();		//LED初始化
 	
 	while(DHT11_Init())
 	{
-		UsartPrintf(USART_DEBUG, "DHT11 Error \r\n");
+		//UsartPrintf(USART_DEBUG, "DHT11 Error \r\n");
+		OLED_ShowString(0, 0, "DHT11 Error", 16);
+		OLED_ShowString(0, 2, "Please Reset!!!",16);
 		DelayMs(1000);
 	}
 	
-	Display_Init();
-	
 	//UsartPrintf(USART_DEBUG, " Hardware init OK\r\n");
-	
+	OLED_ShowString(0, 0, "Hardware init OK", 16);
+	OLED_Clear();
 }
 
 /*
@@ -108,23 +111,32 @@ int main(void)
 	unsigned char *dataPtr = NULL;
 	
 	Hardware_Init();				//初始化外围硬件
-//	
+
 	ESP8266_Init();					//初始化ESP8266
-//	
-//	
-	UsartPrintf(USART_DEBUG, "Connect MQTTs Server...\r\n");
+	
+	OLED_Clear();
+	OLED_ShowString(0, 0, "Connect MQTTs Server...", 16);
+	//UsartPrintf(USART_DEBUG, "Connect MQTTs Server...\r\n");
 	while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
 		DelayXms(500);
-	UsartPrintf(USART_DEBUG, "Connect MQTTs Server success\r\n");
+	//UsartPrintf(USART_DEBUG, "Connect MQTTs Server success\r\n");
+	OLED_ShowString(0, 4, "Connect MQTTs Server success...", 16);
+	//DelayXms(500);
 	
+	OLED_Clear();
+	OLED_ShowString(0, 0, "Device Login...", 16);
 	while(OneNet_DevLink())			//接入OneNET
+	{
+		ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT");
 		DelayXms(500);
+	}
 	
 	OneNET_Subscribe();
 	
-	LED_Set(LED_ON);				//鸣叫提示接入成功
-	DelayMs(5000);
-	LED_Set(LED_OFF);
+//	LED_Set(LED_ON);				//鸣叫提示接入成功
+//	DelayMs(5000);
+//	LED_Set(LED_OFF);
+	Display_Init();
 	
 	while(1)
 	{
@@ -136,6 +148,10 @@ int main(void)
 			DHT11_Read_Data(&temp,&humi);
 			
 			UsartPrintf(USART_DEBUG, "OneNet_SendData\r\n");
+			
+			OLED_ShowChar(108,0,f?' ':'*',16);
+			f=!f;
+			
 			OneNet_SendData();									//发送数据
 			
 			timeCount = 0;
@@ -157,7 +173,6 @@ int main(void)
 
 void Display_Init(void)
 {
-	OLED_Init();			//初始化OLED  
 	OLED_Clear(); 
 	OLED_ShowCHinese(0,0,1);//温
 	OLED_ShowCHinese(18,0,2);//度
@@ -189,4 +204,5 @@ void Refresh_Data(void)
 	//sprintf(text, "\"led\":{\"value\":%s}", LED_info.LED_Status ? "true" : "false");
 	if(LED_info.LED_Status)OLED_ShowCHinese(54,6,8);//亮/灭
 	else OLED_ShowCHinese(54,6,9);//亮/灭
+	
 }
