@@ -1,0 +1,20 @@
+# Keil MDK 编译产生的垃圾文件
+*.o
+*.d
+*.crf
+*.lnp
+*.axf
+*.htm
+*.build_log.htm
+*.dep
+*.lst
+*.map
+*.hex
+*.bin
+Objects/
+Listings/
+
+# HBuilderX / 前端临时文件
+unpackage/
+node_modules/
+.DS_Store
