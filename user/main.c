@@ -39,8 +39,7 @@
 //C库
 #include <string.h>
 
-
-#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"183.230.40.96\",1883\r\n"
+#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
 
 
 /*
@@ -108,11 +107,11 @@ int main(void)
 //	
 	ESP8266_Init();					//初始化ESP8266
 //	
-//	OneNET_RegisterDevice();
 //	
-//	UsartPrintf(USART_DEBUG, "Connect MQTTs Server...\r\n");
-//	while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
-//		DelayXms(500);
+	UsartPrintf(USART_DEBUG, "Connect MQTTs Server...\r\n");
+	while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
+		DelayXms(500);
+	UsartPrintf(USART_DEBUG, "Connect MQTTs Server success\r\n");
 //	
 //	while(OneNet_DevLink())			//接入OneNET
 //		DelayXms(500);
