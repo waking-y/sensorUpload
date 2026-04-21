@@ -2,11 +2,6 @@
 #define _DELAY_H_
 
 
-
-
-
-
-
 void Delay_Init(void);
 
 void DelayUs(unsigned short us);

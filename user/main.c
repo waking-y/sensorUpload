@@ -1,23 +1,3 @@
-/**
-	************************************************************
-	************************************************************
-	************************************************************
-	*	文件名： 	main.c
-	*
-	*	作者： 		张继瑞
-	*
-	*	日期： 		2017-05-08
-	*
-	*	版本： 		V1.0
-	*
-	*	说明： 		接入onenet，上传数据和命令控制
-	*
-	*	修改记录：	
-	************************************************************
-	************************************************************
-	************************************************************
-**/
-
 //单片机头文件
 #include "stm32f10x.h"
 
@@ -40,7 +20,8 @@
 //C库
 #include <string.h>
 
-#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
+//#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
+#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"47.103.140.214\",1883\r\n"
 static u8 f=0;
 
 void Display_Init(void);
@@ -102,7 +83,7 @@ void Hardware_Init(void)
 ************************************************************
 */
 u8 temp,humi;
-
+char my_data[64];
 int main(void)
 {
 	
@@ -151,8 +132,13 @@ int main(void)
 			
 			OLED_ShowChar(108,0,f?' ':'*',16);
 			f=!f;
+		
+			sprintf(my_data, "{\"temp\":%d, \"humi\":%d}", temp, humi);
 			
-			OneNet_SendData();									//发送数据
+			OneNET_Publish("hardware/dht11", my_data); 
+			// --------------------------------------
+			
+			// OneNet_SendData();
 			
 			timeCount = 0;
 			ESP8266_Clear();
