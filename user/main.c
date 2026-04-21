@@ -35,12 +35,16 @@
 #include "LED.h"
 //#include "sht20.h"
 #include "dht11.h"
+#include "mq2.h"
+#include "mq7.h"
 
 //C库
 #include <string.h>
 
 
 #define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"183.230.40.96\",1883\r\n"
+
+
 
 
 /*
@@ -72,6 +76,10 @@ void Hardware_Init(void)
 	
 	LED_Init();									//LED初始化
 	
+	MQ2_Init();
+	//MQ7_ADC_Init();        // 初始化
+	
+	
 	while(DHT11_Init())
 	{
 		UsartPrintf(USART_DEBUG, "DHT11 Error \r\n");
@@ -97,6 +105,11 @@ void Hardware_Init(void)
 */
 u8 temp;
 u8 humi;
+
+float MQ2_Value;//adc值
+uint16_t adc_val;
+float ppm;
+
 int main(void)
 {
 	
@@ -117,14 +130,25 @@ int main(void)
 //	while(OneNet_DevLink())			//接入OneNET
 //		DelayXms(500);
 //	
-	LED_Set(LED_ON);				//鸣叫提示接入成功
-	DelayMs(5000);
-	LED_Set(LED_OFF);
+//	LED_Set(LED_ON);				//鸣叫提示接入成功
+//	DelayMs(5000);
+//	LED_Set(LED_OFF);
 	
 	while(1)
 	{
-		DHT11_Read_Data(&temp,&humi);//
-		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
+		MQ2_Value = MQ2_Read_PPM();
+		adc_val = MQ2_Read_Average(10);
+    ppm = MQ2_Read_PPM();
+    // 纯英文打印，彻底解决乱码
+    UsartPrintf(USART_DEBUG, "ADC:%d  GAS:%.1f ppm\r\n", adc_val, ppm);
+		
+		//UsartPrintf(USART_DEBUG, "%.1f\r\n", MQ2_Value);
+		
+		
+//		val = MQ7_Check();     // 读取浓度
+//		UsartPrintf(USART_DEBUG, "%d\r\n",val);
+//		DHT11_Read_Data(&temp,&humi);//
+//		UsartPrintf(USART_DEBUG, "P4*****temp %d ,humi %d\r\n",temp,humi);
 		
 //		if(++timeCount >= 500)									//发送间隔5s
 //		{

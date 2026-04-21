@@ -35,4 +35,6 @@
 .\output\main.o: .\hardware\inc\key.h
 .\output\main.o: .\hardware\inc\LED.h
 .\output\main.o: .\hardware\inc\dht11.h
+.\output\main.o: .\hardware\inc\mq2.h
+.\output\main.o: .\hardware\inc\mq7.h
 .\output\main.o: D:\EmbeddedSoftware\Keil5\ARM\ARMCC\Bin\..\include\string.h
